@@ -5,4 +5,6 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="defaultBack">#fafafa</color>
     <color name="defaultButtonBack">#D6D7D7</color>
+    <color name="greenBack">#388E3C</color>
+    <color name="redBack">#D32F2F</color>
 </resources>

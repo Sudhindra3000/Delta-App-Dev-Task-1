@@ -10,53 +10,49 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="68dp"
         android:text="Game Over"
         android:textColor="@color/colorPrimary"
         android:textSize="52sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.054" />
 
     <TextView
         android:id="@+id/tvScore2"
         android:layout_width="347dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="296dp"
-        android:layout_marginEnd="28dp"
         android:gravity="center"
         android:text="Score : 10/10"
         android:textColor="@color/colorPrimary"
         android:textSize="33sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.578"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.438" />
 
     <TextView
         android:id="@+id/tvWinStreak"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="30dp"
         android:gravity="center"
         android:text="Longest Win Streak : 10"
         android:textColor="@color/colorPrimary"
         android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvScore2" />
+        app:layout_constraintTop_toBottomOf="@+id/tvScore2"
+        app:layout_constraintVertical_bias="0.076" />
 
     <Button
         android:id="@+id/btPlayAgain"
         android:layout_width="210dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="111dp"
-        android:layout_marginEnd="111dp"
-        android:layout_marginBottom="50dp"
         android:backgroundTint="@color/colorPrimary"
         android:onClick="restartGame"
         android:text="Play Again"
@@ -64,5 +60,8 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvWinStreak"
+        app:layout_constraintVertical_bias="0.771" />
 </androidx.constraintlayout.widget.ConstraintLayout>

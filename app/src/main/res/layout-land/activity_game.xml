@@ -11,21 +11,22 @@
         android:id="@+id/etNumber"
         android:layout_width="168dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="236dp"
-        android:layout_marginTop="48dp"
         android:ems="10"
         android:gravity="center_horizontal"
         android:hint="Enter a number"
         android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.388"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.139" />
 
     <Button
         android:id="@+id/bt1"
         android:layout_width="145dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="103dp"
-        android:layout_marginTop="135dp"
         android:layout_marginEnd="102dp"
         android:backgroundTint="@color/colorPrimary"
         android:onClick="checkAnswer"
@@ -35,9 +36,12 @@
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bt2"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNumber"
+        app:layout_constraintVertical_bias="0.148"
         tools:visibility="visible" />
 
     <Button
@@ -45,7 +49,6 @@
         android:layout_width="145dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="350dp"
-        android:layout_marginTop="135dp"
         android:layout_marginEnd="350dp"
         android:backgroundTint="@color/colorPrimary"
         android:onClick="checkAnswer"
@@ -55,9 +58,11 @@
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNumber"
+        app:layout_constraintVertical_bias="0.148"
         tools:visibility="visible" />
 
     <Button
@@ -65,7 +70,6 @@
         android:layout_width="145dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="102dp"
-        android:layout_marginTop="135dp"
         android:layout_marginEnd="104dp"
         android:backgroundTint="@color/colorPrimary"
         android:onClick="checkAnswer"
@@ -75,18 +79,18 @@
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toEndOf="@+id/bt2"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNumber"
+        app:layout_constraintVertical_bias="0.148"
         tools:visibility="visible" />
 
     <Button
         android:id="@+id/btEndGame"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="162dp"
-        android:layout_marginEnd="162dp"
-        android:layout_marginBottom="50dp"
         android:backgroundTint="@color/colorPrimary"
         android:onClick="showResults"
         android:text="End Game"
@@ -95,8 +99,10 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvResult"
+        app:layout_constraintVertical_bias="0.714" />
 
     <TextView
         android:id="@+id/tvResult"
@@ -104,26 +110,28 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginEnd="28dp"
-        android:layout_marginBottom="152dp"
         android:gravity="center"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bt2"
+        app:layout_constraintVertical_bias="0.187" />
 
     <Button
         android:id="@+id/btOk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="232dp"
         android:backgroundTint="@color/colorPrimary"
         android:onClick="submitNumber"
         android:text="@android:string/ok"
         android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.62"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.14" />
 
     <TextView
         android:id="@+id/tvScore"
