@@ -1,27 +1,28 @@
 package com.example.thefactorfactor;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
+
+import com.example.thefactorfactor.databinding.ActivityResultsBinding;
 
 public class ResultsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_results);
-        TextView tvScore = findViewById(R.id.tvScore2);
-        TextView tvWinStreak = findViewById(R.id.tvWinStreak);
+        ActivityResultsBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_results);
 
-        int total = getIntent().getIntExtra("total", -1);
         int totalCorrect = getIntent().getIntExtra("totalCorrect", -1);
+        int total = getIntent().getIntExtra("total", -1);
         int longestWinStreak = getIntent().getIntExtra("longestWinStreak", -1);
 
-        tvScore.setText("Score : " + totalCorrect + "/" + total);
-        tvWinStreak.setText("Longest Win Streak : " + longestWinStreak);
+        binding.setTotalCorrect(totalCorrect);
+        binding.setTotal(total);
+        binding.setLongestWinStreak(longestWinStreak);
     }
 
     public void restartGame(View view) {

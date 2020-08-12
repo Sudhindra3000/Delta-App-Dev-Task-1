@@ -2,12 +2,11 @@ package com.example.thefactorfactor;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.databinding.DataBindingUtil;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,10 +15,9 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.thefactorfactor.databinding.ActivityGameBinding;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -27,18 +25,17 @@ import java.util.Random;
 public class GameActivity extends AppCompatActivity {
 
     private static final String TAG = "GameActivity";
+    private static final String defaultBack = "#fafafa", greenBack = "#388e3c", redBack = "#d32f2f";
     private final long START_TIME_IN_MILLIS = 10000;
-    private final String defaultBack = "#fafafa", greenBack = "#388e3c", redBack = "#d32f2f";
-    private int locationOfAnswer, correctAnswer, totalCorrect, total, winStreak = 0, longestWinStreak;
+
+    private ActivityGameBinding binding;
+
+    private int locationOfAnswer, correctAnswer, totalCorrect = 0, total = 0, winStreak = 0, longestWinStreak;
     private long timeLeftInMillis = START_TIME_IN_MILLIS;
-    private float okButtonAlpha = 1;
     private boolean firstTime = true, editTextEnabled = true, okButtonEnabled = true, timerRunning = false;
     private String resultString, backgroundColor;
-    private ArrayList<Integer> options;
-    private ConstraintLayout layout;
-    private TextView tvScore, tvTimer, tvResult;
-    private EditText etNumber;
-    private Button btOk, btOp1, btOp2, btOp3;
+    private int[] options = new int[3];
+
     private Random random;
     private SharedPreferences sharedPreferences;
     private Vibrator vibrator;
@@ -60,7 +57,7 @@ public class GameActivity extends AppCompatActivity {
         outState.putBoolean("timerRunning", timerRunning);
         outState.putString("resultString", resultString);
         outState.putString("backgroundColor", backgroundColor);
-        outState.putIntegerArrayList("options", options);
+        outState.putIntArray("options", options);
 
         if (timerRunning) {
             countDownTimer.cancel();
@@ -84,20 +81,17 @@ public class GameActivity extends AppCompatActivity {
         timerRunning = savedInstanceState.getBoolean("timerRunning", false);
         resultString = savedInstanceState.getString("resultString");
         backgroundColor = savedInstanceState.getString("backgroundColor", defaultBack);
-        options = savedInstanceState.getIntegerArrayList("options");
+        options = savedInstanceState.getIntArray("options");
 
         if (!firstTime) {
-            btOp1.setVisibility(View.VISIBLE);
-            btOp2.setVisibility(View.VISIBLE);
-            btOp3.setVisibility(View.VISIBLE);
-            btOp1.setText(String.valueOf(options.get(0)));
-            btOp2.setText(String.valueOf(options.get(1)));
-            btOp3.setText(String.valueOf(options.get(2)));
-            tvResult.setText(resultString);
-            layout.setBackgroundColor(Color.parseColor(backgroundColor));
+            binding.setOptionsVisible(true);
+            binding.setOptions(options);
+            binding.setResult(resultString);
+            binding.gameLayout.setBackgroundColor(Color.parseColor(backgroundColor));
         }
 
-        tvScore.setText("Score : " + totalCorrect + "/" + total);
+        binding.setTotalCorrect(totalCorrect);
+        binding.setTotal(total);
 
         updateEditText(editTextEnabled);
         updateOkButton(okButtonEnabled);
@@ -111,53 +105,42 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_game);
 
         setUpLayout();
 
         random = new Random();
 
-        options = new ArrayList<>();
-        options.add(0);
-        options.add(0);
-        options.add(0);
-
         sharedPreferences = GameActivity.this.getSharedPreferences("pref", MODE_PRIVATE);
         longestWinStreak = sharedPreferences.getInt("longestWinStreak", 0);
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+
     }
 
     public void setUpLayout() {
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT)//Device is in Portrait Mode
-            layout = findViewById(R.id.gameLayoutPortrait);
-        else                                                  //Device is in Landscape Mode
-            layout = findViewById(R.id.gameLayoutLand);
-        btOk = findViewById(R.id.btOk);
-        btOp1 = findViewById(R.id.bt1);
-        btOp2 = findViewById(R.id.bt2);
-        btOp3 = findViewById(R.id.bt3);
-        etNumber = findViewById(R.id.etNumber);
-        tvResult = findViewById(R.id.tvResult);
-        tvScore = findViewById(R.id.tvScore);
-        tvTimer = findViewById(R.id.tvTimer);
+        binding.setTotalCorrect(totalCorrect);
+        binding.setTotal(total);
+        binding.setTimeLeft(10);
+        binding.setResult("");
     }
 
     public void updateEditText(boolean enabled) {
         editTextEnabled = enabled;
-        etNumber.setEnabled(editTextEnabled);
-        etNumber.setFocusableInTouchMode(editTextEnabled);
+        binding.etNumber.setEnabled(editTextEnabled);
+        binding.etNumber.setFocusableInTouchMode(editTextEnabled);
     }
 
     public void updateOkButton(boolean enabled) {
         okButtonEnabled = enabled;
+        float okButtonAlpha = 1;
         if (okButtonEnabled)
             okButtonAlpha = 1;
         else
             okButtonAlpha = (float) 0.5;
-        btOk.setEnabled(okButtonEnabled);
-        btOk.setAlpha(okButtonAlpha);
+        binding.okBt.setEnabled(okButtonEnabled);
+        binding.okBt.setAlpha(okButtonAlpha);
     }
 
     private void startTimer() {
@@ -165,21 +148,21 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 timeLeftInMillis = millisUntilFinished;
-                tvTimer.setText("Time Left : " + (timeLeftInMillis / 1000) + "s");
+                binding.setTimeLeft((int) (timeLeftInMillis / 1000));
                 Log.i(TAG, "onTick: Time Left:" + (millisUntilFinished / 1000));
             }
 
             @Override
             public void onFinish() {
                 Log.i(TAG, "Timer Finished");
-                showResults(findViewById(R.id.btEndGame));
+                showResults(findViewById(R.id.endGameBt));
             }
         }.start();
         timerRunning = true;
     }
 
     public void submitNumber(View view) {
-        String numberString = etNumber.getText().toString();
+        String numberString = binding.etNumber.getText().toString();
         if (numberString.isEmpty()) {
             Toast.makeText(GameActivity.this, "Enter a number to Play", Toast.LENGTH_SHORT).show();
         } else if (numberString.equals("1") || numberString.equals("0")) {
@@ -189,11 +172,9 @@ public class GameActivity extends AppCompatActivity {
             updateOkButton(false);
             startTimer();
             Log.i(TAG, "onClick: Countdown timer started");
-            tvTimer.setVisibility(View.VISIBLE);
+            binding.tvTimer.setVisibility(View.VISIBLE);
             if (firstTime) {
-                btOp1.setVisibility(View.VISIBLE);
-                btOp2.setVisibility(View.VISIBLE);
-                btOp3.setVisibility(View.VISIBLE);
+                binding.setOptionsVisible(true);
                 firstTime = false;
             }
             generateOptions(Integer.parseInt(numberString));
@@ -204,14 +185,14 @@ public class GameActivity extends AppCompatActivity {
         if (locationOfAnswer != -1) {
             updateEditText(true);
             updateOkButton(true);
-            etNumber.getText().clear();
+            binding.etNumber.getText().clear();
             total++;
             if (Integer.parseInt(view.getTag().toString()) == locationOfAnswer) {
                 totalCorrect++;
                 backgroundColor = greenBack;
-                layout.setBackgroundColor(Color.parseColor(backgroundColor));
+                binding.gameLayout.setBackgroundColor(Color.parseColor(backgroundColor));
                 resultString = "Correct";
-                tvResult.setText(resultString);
+                binding.setResult(resultString);
                 winStreak++;
                 if (winStreak > longestWinStreak) {
                     longestWinStreak = winStreak;
@@ -220,9 +201,9 @@ public class GameActivity extends AppCompatActivity {
             } else {
                 winStreak = 0;
                 backgroundColor = redBack;
-                layout.setBackgroundColor(Color.parseColor(backgroundColor));
+                binding.gameLayout.setBackgroundColor(Color.parseColor(backgroundColor));
                 resultString = "Wrong.Correct answer is " + correctAnswer;
-                tvResult.setText(resultString);
+                binding.setResult(resultString);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                     vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
                 else
@@ -232,8 +213,9 @@ public class GameActivity extends AppCompatActivity {
             timeLeftInMillis = START_TIME_IN_MILLIS;
             timerRunning = false;
             Log.i(TAG, "Timer Canceled");
-            tvTimer.setText("Time Left : 10s");
-            tvScore.setText("Score : " + totalCorrect + "/" + total);
+            binding.setTimeLeft(10);
+            binding.setTotalCorrect(totalCorrect);
+            binding.setTotal(total);
             locationOfAnswer = -1;
         }
     }
@@ -246,34 +228,32 @@ public class GameActivity extends AppCompatActivity {
             correctAnswer = n;
             for (int i = 0; i < 3; i++) {
                 if (i == locationOfAnswer) {
-                    options.set(i, correctAnswer);
+                    options[i] = correctAnswer;
                 } else {
                     wrongAnswer = random.nextInt(n + 10) - 10;
                     while (wrongAnswer == 0 || n % wrongAnswer == 0 || x == wrongAnswer) {
                         wrongAnswer = random.nextInt(n + 10) - 10;
                     }
                     x = wrongAnswer;
-                    options.set(i, wrongAnswer);
+                    options[i] = wrongAnswer;
                 }
             }
         } else {
             correctAnswer = generateRandomFactor(n);
             for (int i = 0; i < 3; i++) {
                 if (i == locationOfAnswer) {
-                    options.set(i, correctAnswer);
+                    options[i] = correctAnswer;
                 } else {
                     wrongAnswer = random.nextInt(n) + 1;
                     while (n % wrongAnswer == 0 || x == wrongAnswer) {
                         wrongAnswer = random.nextInt(n) + 1;
                     }
                     x = wrongAnswer;
-                    options.set(i, wrongAnswer);
+                    options[i] = wrongAnswer;
                 }
             }
         }
-        btOp1.setText(String.valueOf(options.get(0)));
-        btOp2.setText(String.valueOf(options.get(1)));
-        btOp3.setText(String.valueOf(options.get(2)));
+        binding.setOptions(options);
     }
 
     public int generateRandomFactor(int n) {
